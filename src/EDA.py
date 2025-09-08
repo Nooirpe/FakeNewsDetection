@@ -1,5 +1,10 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+
+# Thiết lập matplotlib
+plt.style.use('default')
+plt.rcParams['figure.figsize'] = (10, 6)
 
 df = pd.read_csv('Data/raw.csv')
 
@@ -30,11 +35,50 @@ label_percentages = df['labels'].value_counts(normalize=True)*100
 for label, percentage in label_percentages.items():
     print(f"{label}: {percentage:.1f}%")
 
+# Vẽ biểu đồ phân bố nhãn
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+colors = ['green' if label == 'true' else 'red' for label in label_counts.index]
+label_counts.plot(kind='bar', color=colors)
+plt.title('Phân bố số lượng nhãn')
+plt.xlabel('Nhãn')
+plt.ylabel('Số lượng')
+plt.xticks(rotation=0)
+
+plt.subplot(1, 2, 2)
+label_counts.plot(kind='pie', autopct='%1.1f%%', colors=colors)
+plt.title('Tỷ lệ phần trăm nhãn')
+plt.ylabel('')
+plt.tight_layout()
+plt.show()
+
 # Phân tích theo thời gian
 print("\nPHÂN TÍCH THEO THỜI GIAN:")
 time_counts = df['year_month'].value_counts().sort_index()
 print(f"\n{time_counts.head(10)}")  # Hiển thị 10 tháng đầu tiên
 print(f"\nKhoảng thời gian: {df['year_month'].min()} đến {df['year_month'].max()}")
+
+# Vẽ biểu đồ theo thời gian
+plt.figure(figsize=(15, 6))
+
+plt.subplot(1, 2, 1)
+time_counts.plot(kind='line', marker='o', color='blue')
+plt.title('Số lượng bài viết theo thời gian')
+plt.xlabel('Năm-Tháng')
+plt.ylabel('Số lượng bài viết')
+plt.xticks(rotation=45)
+plt.grid(True, alpha=0.3)
+
+plt.subplot(1, 2, 2)
+time_counts.plot(kind='bar', color='skyblue')
+plt.title('Phân bố bài viết theo tháng')
+plt.xlabel('Năm-Tháng')
+plt.ylabel('Số lượng')
+plt.xticks(rotation=45)
+
+plt.tight_layout()
+plt.show()
 
 # Phân tích độ dài tiêu đề và nội dung
 print("\nPHÂN TÍCH ĐỘ DÀI TIÊU ĐỀ VÀ NỘI DUNG:")
@@ -45,6 +89,7 @@ df['word_count'] = df['text'].str.split().str.len()
 print(f"\nĐộ dài trung bình của text: {df['text_length'].mean():.0f} ký tự")
 print(f"Độ dài trung bình của title: {df['title_length'].mean():.0f} ký tự")
 print(f"Số từ trung bình: {df['word_count'].mean():.0f} từ")
+
 
 # So sánh theo nhãn
 print("\nSO SÁNH THEO NHÃN:")
@@ -69,3 +114,32 @@ if abs(true_count - fake_count) > len(df) * 0.2:
     print("Dữ liệu bị lệch nhãn.")
 else:
     print("Dữ liệu cân bằng.")
+
+# Biểu đồ tổng kết
+plt.figure(figsize=(15, 5))
+
+plt.subplot(1, 3, 1)
+labels = ['True', 'Fake']
+sizes = [true_count, fake_count]
+colors = ['green', 'red']
+plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
+plt.title('Tổng quan phân bố nhãn')
+
+plt.subplot(1, 3, 2)
+monthly_stats = df.groupby('year_month').size()
+plt.plot(range(len(monthly_stats)), monthly_stats.values, marker='o', color='purple')
+plt.title('Xu hướng số bài theo thời gian')
+plt.xlabel('Tháng (theo thứ tự)')
+plt.ylabel('Số bài')
+plt.grid(True, alpha=0.3)
+
+plt.subplot(1, 3, 3)
+avg_lengths_by_label = df.groupby('labels')['text_length'].mean()
+plt.bar(avg_lengths_by_label.index, avg_lengths_by_label.values, color=['red', 'green'])
+plt.title('Độ dài trung bình theo nhãn')
+plt.xlabel('Nhãn')
+plt.ylabel('Số ký tự trung bình')
+
+plt.tight_layout()
+plt.show()
+
