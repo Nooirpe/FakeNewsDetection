@@ -13,7 +13,7 @@ try:
     print(f"Đọc thành công {len(df)} bản ghi")
 except FileNotFoundError:
     try:
-        df = pd.read_csv('../Data/raw.csv')
+        df = pd.read_csv('Data/raw.csv')
         print(f"Đọc thành công {len(df)} bản ghi")
     except FileNotFoundError:
         print("Không tìm thấy file dữ liệu!")

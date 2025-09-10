@@ -16,8 +16,8 @@ print(f"Tên các cột: {list(df.columns)}")
 
 # Xem dữ liệu mẫu
 print("\n1 VÀI DỮ LIỆU MẪU:")
-print(df.head()) # Hiển thị 5 dòng đầu tiên
-
+print(df.head()) 
+         
 # Thông tin chi tiết
 print("\nTHÔNG TIN CHI TIẾT:")
 print(df.info())

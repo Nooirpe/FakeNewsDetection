@@ -1,0 +1,11 @@
+Best Model: Naive Bayes
+Best CV F1-Score: 0.9744
+Timestamp: 2025-09-09 21:28:35.756398
+==================================================
+
+Best Parameters:
+  tfidf__ngram_range: (1, 2)
+  tfidf__min_df: 2
+  tfidf__max_features: 20000
+  tfidf__max_df: 0.95
+  classifier__alpha: 0.5
